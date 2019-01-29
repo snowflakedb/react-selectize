@@ -15,6 +15,7 @@ module.exports = class DivWrapper extends React.Component
         div do 
             class-name: @props.class-name
             ref: \dropdown
+            style: @props.style
             @props.children
 
     # component-did-mount :: () -> Void

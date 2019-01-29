@@ -113,9 +113,9 @@ describe "MultiSelect", ->
         click-to-open-select-control select
         click-option find-highlighted-option select
         click-option find-highlighted-option select
-        assert component-with-class-must-not-exist select, \dropdown-menu
+        assert component-with-class-must-not-exist select, \rs-dropdown-menu
         click-to-open-select-control select
-        assert component-with-class-must-not-exist select, \dropdown-menu
+        assert component-with-class-must-not-exist select, \rs-dropdown-menu
 
     specify "command + left/right must position the cursor at the start/end", (done) ->
         start-count = 0
@@ -138,7 +138,7 @@ describe "MultiSelect", ->
         select = create-multi-select!
         click-to-open-select-control select
         [0 til 8] |> each ~> click-option find-highlighted-option select
-        component-with-class-must-not-exist select, \dropdown-menu
+        component-with-class-must-not-exist select, \rs-dropdown-menu
 
     specify "must be able to select other values when props.default-values is defined", ->
         select = create-multi-select do 

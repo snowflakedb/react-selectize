@@ -80,7 +80,7 @@ module.exports = class SimpleSelect extends React.Component
             autofocus, autosize, cancel-keyboard-event-on-selection, delimiters, disabled, dropdown-direction, group-id, 
             groups, groups-as-columns, hide-reset-button, name, input-props, on-blur-resets-input, render-toggle-button,
             render-group-title, render-reset-button, serialize, tether, tether-props, theme, transition-enter,
-            transition-leave, transition-enter-timeout, transition-leave-timeout, uid
+            transition-leave, transition-enter-timeout, transition-leave-timeout, uid, highlight-on-open, close-on-scroll
         }? = @props
             
         ReactSelectize {
@@ -89,12 +89,14 @@ module.exports = class SimpleSelect extends React.Component
             autosize
             cancel-keyboard-event-on-selection
             class-name: "simple-select" + if !!@props.class-name then " #{@props.class-name}" else ""
+            close-on-scroll
             delimiters
             disabled
             dropdown-direction
             group-id
             groups
             groups-as-columns
+            highlight-on-open
             hide-reset-button
             highlighted-uid
             on-highlighted-uid-change
@@ -149,7 +151,7 @@ module.exports = class SimpleSelect extends React.Component
                     changed = !(new-value `is-equal-to-object` value)
 
                     # invoke on-value-change if new value differs from the old
-                    <~ do ~> (callback) ~> if changed then on-value-change new-value, callback else callback!
+                    <~ do ~> (callback) ~> if true then on-value-change new-value, callback else callback!
                     callback!
 
                     # close dropdown but keep the input field in foucs

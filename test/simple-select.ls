@@ -159,6 +159,6 @@ describe "SimpleSelect", ->
         set-input-text input, "some random text"
         press-return input
         <~ set-timeout _, 25
-        component-with-class-must-not-exist \dropdown-menu
+        component-with-class-must-not-exist \rs-dropdown-menu
         assert select.state.search == ""
         done!

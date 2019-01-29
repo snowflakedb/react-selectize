@@ -19,6 +19,8 @@ module.exports = class ReactSelectize extends React.Component
     # used to figure out if the focus event was triggered by external action or by @focus-on-input!
     focus-lock: false
 
+    dropdown-menu-width: null
+
     # get-default-props :: () -> Props
     @default-props =
         anchor: null # :: Item
@@ -82,9 +84,23 @@ module.exports = class ReactSelectize extends React.Component
         theme: \default
         uid: id # (Eq e) => Item -> e
         values: [] # [Item]
+        close-on-scroll: false
+        highlight-on-open: false
+
+
 
     # render :: () -> ReactElement
     render: ->
+
+        dropdown-menu-props = {}
+        selectize-props = @props
+        for key of selectize-props
+          if selectize-props.hasOwnProperty key
+            property = selectize-props[key]
+            dropdown-menu-props[key] = property
+        dropdown-menu-props.dropdown-width = @dropdown-menu-width
+
+
         anchor-index = 
             | (typeof @props.anchor == \undefined) or @props.anchor == null => -1
             | _ => (find-index (~> it `@is-equal-to-object` @props.anchor), @props.values) ? @props.values.length - 1
@@ -126,7 +142,7 @@ module.exports = class ReactSelectize extends React.Component
 
             # CONTROL
             div do 
-                class-name: \react-selectize-control
+                class-name: if @props.open and @props.highlight-on-open then 'react-selectize-control react-selectize-control-open' else 'react-selectize-control'
                 ref: \control
 
                 # using click would cause a flicker because:
@@ -231,7 +247,7 @@ module.exports = class ReactSelectize extends React.Component
                     
         
             # (TETHERED / ANIMATED / SIMPLE) DROPDOWN
-            DropdownMenu {} <<< @props <<< 
+            DropdownMenu {} <<< dropdown-menu-props <<<
                 ref: \dropdownMenu
                 class-name: class-name-from-object do
                     \react-selectize : 1
@@ -399,6 +415,10 @@ module.exports = class ReactSelectize extends React.Component
         # and focus on the search input, just like we would when it is opened by external action
         if @props.open
             @highlight-and-focus!
+            @calculate-dropdown-width!
+
+        @.handle-scroll = @.handle-scroll.bind(this)
+        window.add-event-listener('scroll', @.handle-scroll)
 
     # component-did-update :: Props -> UIState -> ()
     component-did-update: (prev-props) !->
@@ -417,6 +437,9 @@ module.exports = class ReactSelectize extends React.Component
            (typeof props.disabled != \undefined and props.disabled == true)
            @on-open-change false, ~>
 
+    component-will-unmount: !->
+        window.remove-event-listener('scroll', @.handle-scroll)
+
     # option-index-from-uid :: (Eq e) => e -> Int
     option-index-from-uid: (uid) -> @props.options |> find-index ~> uid `is-equal-to-object` @props.uid it
 
@@ -426,6 +449,14 @@ module.exports = class ReactSelectize extends React.Component
         @props.on-anchor-change do 
             last @props.values
             callback
+
+    #handles scrolling
+    handle-scroll: (event) !->
+        if @props.close-on-scroll and @props.open and @refs.dropdown-menu
+          menu = @refs.dropdown-menu.dropdown-menu.refs.dropdown
+          if event.target != menu
+            @blur!
+
 
     # blur :: () -> ()
     blur: !-> @refs.search.blur!
@@ -530,3 +561,6 @@ module.exports = class ReactSelectize extends React.Component
     
     # uid-to-string :: () -> String, only used for the key prop (required by react render), & for refs
     uid-to-string: (uid) -> (if typeof uid == \object then JSON.stringify else id) uid
+
+    calculate-dropdown-width: !->
+        @dropdown-menu-width = @refs.control.offset-width

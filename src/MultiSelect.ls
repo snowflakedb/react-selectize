@@ -76,7 +76,7 @@ module.exports = class MultiSelect extends React.Component
             autofocus, autosize, cancel-keyboard-event-on-selection, delimiters, disabled, dropdown-direction, group-id, 
             groups, groups-as-columns, hide-reset-button, input-props, name, on-keyboard-selection-failed, render-toggle-button, 
             render-group-title, render-reset-button, serialize, tether, tether-props, theme, transition-enter, transition-leave, 
-            transition-enter-timeout, transition-leave-timeout, uid
+            transition-enter-timeout, transition-leave-timeout, uid, highlight-on-open, close-on-scroll
         }? = @props
 
         ReactSelectize {
@@ -85,6 +85,7 @@ module.exports = class MultiSelect extends React.Component
             autosize
             cancel-keyboard-event-on-selection
             class-name: "multi-select #{@props.class-name}"
+            close-on-scroll
             delimiters
             disabled
             dropdown-direction
@@ -93,6 +94,7 @@ module.exports = class MultiSelect extends React.Component
             groups-as-columns
             hide-reset-button
             highlighted-uid
+            highlight-on-open
             on-highlighted-uid-change
             input-props
             name
