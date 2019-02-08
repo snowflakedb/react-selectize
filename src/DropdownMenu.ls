@@ -144,7 +144,7 @@ module.exports = class DropdownMenu extends React.PureComponent
             DivWrapper do 
                 class-name: "rs-dropdown-menu #{dynamic-class-name}"
                 ref: (element) !~> !!element && @dropdown-menu = element
-                style: if @props.dropdown-width and @props.open then {width:@props.dropdown-width, minWidth: '0px'} else {}
+                style: if @props.dropdown-width and @props.open then {width:@props.dropdown-width, minWidth: '0px', bottom: if @props.dropdown-bottom then @props.dropdown-bottom else null} else {}
 
 
 

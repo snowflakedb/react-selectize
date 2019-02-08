@@ -17,6 +17,7 @@ class ReactTether extends React.PureComponent
     # init-tether :: Props -> Void
     init-tether: (props) !->
         @node = document.create-element \div
+        @node.style.z-index = 999
         @props.parent-element!.append-child @node
         @tether = new Tether {
             element: @node

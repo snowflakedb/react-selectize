@@ -1,6 +1,6 @@
 {
   "name": "react-selectize",
-  "version": "3.0.1-tether-fix-1",
+  "version": "3.0.1-tether-fix-8",
   "description": "A Stateless & Flexible Select component for React inspired by Selectize",
   "main": "src/index.js",
   "scripts": {
@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "async-ls": "0.0.3",
-    "brace": "git+https://github.com/furqanZafar/brace.git",
+    "brace": "0.11.1",
     "brfs": "^1.4.1",
     "browserify": "^14.4.0",
     "browserify-shim": "^3.8.10",
@@ -81,5 +81,8 @@
     "tags",
     "dropdown",
     "combobox"
-  ]
+  ],
+  "publishConfig": {
+    "registry": "http://10.180.20.84:8081/repository/sf_npm_repo/"
+  }
 }

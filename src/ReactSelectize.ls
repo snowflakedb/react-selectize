@@ -21,6 +21,8 @@ module.exports = class ReactSelectize extends React.Component
 
     dropdown-menu-width: null
 
+    dropdown-menu-bottom: null
+
     # get-default-props :: () -> Props
     @default-props =
         anchor: null # :: Item
@@ -99,6 +101,9 @@ module.exports = class ReactSelectize extends React.Component
             property = selectize-props[key]
             dropdown-menu-props[key] = property
         dropdown-menu-props.dropdown-width = @dropdown-menu-width
+
+        if @props.dropdown-direction == -1
+            dropdown-menu-props.dropdown-bottom = @dropdown-menu-bottom
 
 
         anchor-index = 
@@ -415,10 +420,10 @@ module.exports = class ReactSelectize extends React.Component
         # and focus on the search input, just like we would when it is opened by external action
         if @props.open
             @highlight-and-focus!
-            @calculate-dropdown-width!
+            @calculate-dropdown-width-and-bottom!
 
         @.handle-scroll = @.handle-scroll.bind(this)
-        window.add-event-listener('scroll', @.handle-scroll)
+        window.add-event-listener('scroll', @.handle-scroll, true)
 
     # component-did-update :: Props -> UIState -> ()
     component-did-update: (prev-props) !->
@@ -426,6 +431,7 @@ module.exports = class ReactSelectize extends React.Component
         # if the list of options opened then highlight the first option & focus on the search input
         if @props.open and !prev-props.open and @props.highlighted-uid == undefined
             @highlight-and-focus!
+            @calculate-dropdown-width-and-bottom!
 
         # if the list of options was closed then reset highlighted-uid 
         if !@props.open and prev-props.open
@@ -562,5 +568,7 @@ module.exports = class ReactSelectize extends React.Component
     # uid-to-string :: () -> String, only used for the key prop (required by react render), & for refs
     uid-to-string: (uid) -> (if typeof uid == \object then JSON.stringify else id) uid
 
-    calculate-dropdown-width: !->
+    calculate-dropdown-width-and-bottom: !->
         @dropdown-menu-width = @refs.control.offset-width
+        if @props.dropdown-direction == -1
+            @dropdown-menu-bottom = @refs.control.offset-height - 1
